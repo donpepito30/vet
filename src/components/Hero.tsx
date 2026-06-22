@@ -60,14 +60,14 @@ export default function Hero() {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="absolute inset-0 w-full h-full"
           >
-            <div className="absolute inset-0 bg-ink/40 z-10"></div>
+            <div className="absolute inset-0 bg-ink/20 z-10"></div>
             <img
               src={carouselItems[currentSlide].url}
               alt="Vet Care"
-              className="w-full h-full object-cover opacity-70"
+              className="w-full h-full object-cover opacity-85"
               {...(currentSlide === 0 ? { fetchPriority: "high" } : {})}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/60 to-transparent z-20"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/40 to-transparent z-20"></div>
           </motion.div>
         </AnimatePresence>
       </div>
