@@ -1,0 +1,6 @@
+{
+  "name": "VetCare Elite - Veterinaria Premium",
+  "description": "Sitio web premium para clínica veterinaria moderna con enfoque en confianza, profesionalismo y conversión.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
