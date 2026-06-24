@@ -77,7 +77,7 @@ export default function Navbar() {
 
           <div className="flex flex-col">
             <motion.span 
-              className={`text-2xl font-display font-black tracking-tighter leading-none transition-colors ${isScrolled ? 'text-primary' : 'text-primary'}`}
+              className={`text-2xl font-display font-black tracking-tighter leading-none transition-colors ${isScrolled ? 'text-primary' : 'text-white'}`}
               variants={{
                 initial: { x: 0 },
                 hover: { x: 2 }
@@ -132,7 +132,7 @@ export default function Navbar() {
               key={link.name}
               href={link.href}
               className={`text-[13px] font-extrabold tracking-[0.15em] uppercase transition-all hover:text-accent relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full ${
-                isScrolled ? 'text-ink' : 'text-ink'
+                isScrolled ? 'text-ink' : 'text-white/90 hover:text-accent'
               }`}
             >
               {link.name}
@@ -150,7 +150,7 @@ export default function Navbar() {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`lg:hidden p-2 rounded-lg transition-colors ${
-            isScrolled ? 'text-ink' : 'text-ink'
+            isScrolled ? 'text-ink' : 'text-white'
           }`}
           aria-label="Toggle menu"
         >

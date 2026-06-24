@@ -9,22 +9,16 @@ import { ShieldCheck, Clock, Award, Star, Heart, ArrowRight, Play } from 'lucide
 
 const carouselItems = [
   {
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1544568100-847a948585b9?q=80&w=2074&auto=format&fit=crop',
     title: 'Cuidamos a quienes te acompañan',
     highlight: 'toda la vida.',
     subtitle: 'Atención veterinaria de élite con tecnología de vanguardia y amor incondicional.'
   },
   {
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?q=80&w=2148&auto=format&fit=crop',
     title: 'Salud y bienestar para tus',
     highlight: 'mejores amigos.',
     subtitle: 'Especialistas certificados dedicados a la medicina preventiva y cuidados intensivos.'
   },
   {
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1537151625747-7ae05d21469b?q=80&w=2187&auto=format&fit=crop',
     title: 'Vínculos inquebrantables,',
     highlight: 'salud garantizada.',
     subtitle: 'Instalaciones diseñadas para reducir el estrés y garantizar la mejor recuperación.'
@@ -35,41 +29,32 @@ export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
-    // Preload all carousel images
-    carouselItems.forEach((item) => {
-      const img = new Image();
-      img.src = item.url;
-    });
+    // Preload the single background GIF
+    const img = new Image();
+    img.src = 'https://i.ibb.co/prNSsXVq/Dog-playing-with-owner-field-202606241138.gif';
 
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
-    }, 8000);
+    }, 16000);
     return () => clearInterval(timer);
   }, []);
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-ink flex flex-col pt-24 lg:pt-32">
-      {/* Background Carousel */}
+      {/* Background GIF - Static to prevent GIF animation restart or flickering */}
       <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute inset-0 w-full h-full"
-          >
-            <div className="absolute inset-0 bg-ink/20 z-10"></div>
-            <img
-              src={carouselItems[currentSlide].url}
-              alt="Vet Care"
-              className="w-full h-full object-cover opacity-85"
-              {...(currentSlide === 0 ? { fetchPriority: "high" } : {})}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/40 to-transparent z-20"></div>
-          </motion.div>
-        </AnimatePresence>
+        {/* Soft dark tint over image */}
+        <div className="absolute inset-0 bg-ink/10 z-10 pointer-events-none"></div>
+        <img
+          src="https://i.ibb.co/prNSsXVq/Dog-playing-with-owner-field-202606241138.gif"
+          alt="Vet Care Background"
+          className="w-full h-full object-cover opacity-90"
+          fetchPriority="high"
+        />
+        {/* Soft, beautiful top-to-bottom vignette fading from the header area for optimal nav readability */}
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-ink/60 to-transparent z-15 pointer-events-none"></div>
+        {/* Left-to-right gradient overlay to ensure highest readability of text without dark-washing the whole image */}
+        <div className="absolute inset-y-0 left-0 w-full lg:w-[60%] bg-gradient-to-r from-ink/85 via-ink/40 to-transparent z-20 pointer-events-none"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 w-full relative z-30 flex flex-col justify-center flex-grow py-16 lg:py-32">
