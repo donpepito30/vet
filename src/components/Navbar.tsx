@@ -32,12 +32,17 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
   ];
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        showScrolledStyle ? 'glass-effect py-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] border-b border-neutral/30' : 'bg-transparent py-8'
+    <header
+      className={`fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl z-50 transition-all duration-500 border backdrop-blur-md ${
+        isOpen 
+          ? 'bg-white border-neutral-300/50 shadow-premium rounded-[2rem] py-5 px-6' 
+          : showScrolledStyle 
+            ? 'bg-white/85 border-neutral/40 shadow-premium py-2.5 px-3 md:px-5 rounded-full' 
+            : 'bg-white/10 md:bg-black/15 border-white/10 shadow-soft py-4 px-5 md:px-7 rounded-full'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <div className="flex justify-between items-center w-full">
+        {/* Logo */}
         <motion.a 
           href="#" 
           className="flex items-center gap-3 group"
@@ -45,7 +50,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
           whileHover="hover"
         >
           <motion.div 
-            className="relative w-12 h-12 flex items-center justify-center"
+            className="relative w-10 h-10 flex items-center justify-center"
             variants={{
               initial: { scale: 1 },
               hover: { scale: 1.1 }
@@ -53,7 +58,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
           >
             {/* Energy pulse background */}
             <motion.div 
-              className="absolute inset-0 bg-accent rounded-xl opacity-20 blur-md"
+              className="absolute inset-0 bg-accent rounded-full opacity-20 blur-md"
               variants={{
                 initial: { scale: 0.8, opacity: 0 },
                 hover: { 
@@ -68,116 +73,100 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
               }}
             />
             <motion.div 
-              className="relative w-full h-full bg-accent rounded-xl flex items-center justify-center shadow-lg shadow-accent/20 z-10"
+              className="relative w-full h-full bg-accent rounded-full flex items-center justify-center shadow-lg shadow-accent/20 z-10"
               variants={{
                 initial: { rotate: 0 },
                 hover: { rotate: 12, transition: { type: "spring", stiffness: 300 } }
               }}
             >
-              <PawPrint className="text-white w-7 h-7 fill-white" />
+              <PawPrint className="text-white w-5 h-5 fill-white" />
             </motion.div>
           </motion.div>
 
           <div className="flex flex-col">
             <motion.span 
-              className={`text-2xl font-display font-black tracking-tighter leading-none transition-colors ${showScrolledStyle ? 'text-primary' : 'text-white'}`}
-              variants={{
-                initial: { x: 0 },
-                hover: { x: 2 }
-              }}
+              className={`text-xl font-display font-black tracking-tighter leading-none transition-colors duration-300 ${
+                isOpen || showScrolledStyle ? 'text-primary' : 'text-white'
+              }`}
             >
               <motion.span 
                 className="inline-block"
                 variants={{
                   initial: { y: 0 },
-                  hover: { y: -2, transition: { type: "spring", stiffness: 400 } }
+                  hover: { y: -1, transition: { type: "spring", stiffness: 400 } }
                 }}
               >
                 VetCare
               </motion.span>
-              <motion.span 
-                className="text-accent italic relative inline-block ml-1"
-                variants={{
-                  initial: { scale: 1 },
-                  hover: { 
-                    scale: 1.05,
-                    transition: { type: "spring", stiffness: 500, damping: 10 }
-                  }
-                }}
-              >
+              <motion.span className="text-accent italic ml-1">
                 Elite
-                <motion.div 
-                  className="absolute -bottom-1 left-0 w-full h-[2px] bg-accent"
-                  initial={{ scaleX: 0 }}
-                  variants={{
-                    initial: { scaleX: 0 },
-                    hover: { scaleX: 1, transition: { duration: 0.3 } }
-                  }}
-                />
               </motion.span>
             </motion.span>
-            <motion.span 
-              className="text-[8px] font-black uppercase tracking-[0.4em] text-accent/60 leading-none mt-1"
-              variants={{
-                initial: { opacity: 0.6, x: -5 },
-                hover: { opacity: 1, x: 0, transition: { delay: 0.1 } }
-              }}
-            >
+            <span className={`text-[7px] font-black uppercase tracking-[0.35em] leading-none mt-1 transition-colors duration-300 ${
+              isOpen || showScrolledStyle ? 'text-accent/70' : 'text-white/60'
+            }`}>
               Premium Veterinary
-            </motion.span>
+            </span>
           </div>
         </motion.a>
 
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-10">
+        {/* Center: Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive = currentPage === link.activeKey;
             return (
               <a
                 key={link.name}
                 href={link.href}
-                className={`text-[13px] font-extrabold tracking-[0.15em] uppercase transition-all hover:text-accent relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-accent after:transition-all ${
-                  isActive ? 'text-accent after:w-full' : 'after:w-0 hover:after:w-full'
-                } ${
-                  showScrolledStyle 
-                    ? isActive ? 'text-accent' : 'text-ink'
-                    : isActive ? 'text-accent' : 'text-white/90 hover:text-accent'
+                className={`relative py-2 px-1 text-[13px] font-extrabold tracking-[0.12em] uppercase transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-center ${
+                  isActive 
+                    ? 'text-accent after:scale-x-100' 
+                    : isOpen || showScrolledStyle 
+                      ? 'text-ink hover:text-accent' 
+                      : 'text-white/95 hover:text-accent'
                 }`}
               >
                 {link.name}
               </a>
             );
           })}
-          <a
+        </nav>
+
+        {/* Right: CTA/Actions */}
+        <div className="hidden lg:flex items-center">
+          <motion.a
             href="#contacto"
-            className="bg-accent hover:bg-cta-hover text-white px-8 py-3.5 rounded-full text-[13px] font-black tracking-widest transition-all shadow-xl shadow-accent/20 hover:-translate-y-1 active:scale-95"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="bg-accent hover:bg-cta-hover text-white px-6 py-3 rounded-full text-[12px] font-black tracking-widest transition-all shadow-md hover:shadow-lg shadow-accent/20"
           >
             AGENDAR CITA
-          </a>
+          </motion.a>
         </div>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`lg:hidden p-2 rounded-lg transition-colors ${
-            showScrolledStyle ? 'text-ink' : 'text-white'
+          className={`lg:hidden p-2 rounded-full transition-colors duration-300 hover:bg-black/5 ${
+            isOpen || showScrolledStyle ? 'text-ink' : 'text-white'
           }`}
           aria-label="Toggle menu"
         >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 w-full bg-white shadow-xl lg:hidden py-8 px-6 border-t border-neutral"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="overflow-hidden lg:hidden"
           >
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-5 pt-6 pb-2 border-t border-neutral/30 mt-4">
               {navLinks.map((link) => {
                 const isActive = currentPage === link.activeKey;
                 return (
@@ -185,7 +174,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
                     key={link.name}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`text-lg font-black transition-colors uppercase tracking-widest ${
+                    className={`text-base font-black transition-colors uppercase tracking-widest py-1 ${
                       isActive ? 'text-accent' : 'text-ink hover:text-accent'
                     }`}
                   >
@@ -196,7 +185,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
               <a
                 href="#contacto"
                 onClick={() => setIsOpen(false)}
-                className="bg-accent text-white text-center py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-accent/20"
+                className="bg-accent text-white text-center py-4 rounded-xl font-black uppercase tracking-widest shadow-md hover:bg-cta-hover transition-colors"
               >
                 Agendar cita
               </a>
@@ -204,6 +193,6 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </header>
   );
 }
