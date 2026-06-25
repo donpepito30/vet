@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect } from 'react';
-import { motion } from 'motion/react';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -26,6 +26,8 @@ import { WhatsAppButton } from './components/WhatsAppButton';
  */
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+
   useEffect(() => {
     // Basic SEO Title update
     document.title = 'VetCare Elite | Clínica Veterinaria Premium - Emergencias 24/7';
@@ -35,6 +37,23 @@ export default function App() {
     if (metaDisc) {
       metaDisc.setAttribute('content', 'Atención veterinaria integral con tecnología moderna y profesionales comprometidos. Cuidamos a tu mascota con amor y excelencia 24/7.');
     }
+
+    const handleHashChange = () => {
+      const hash = window.location.hash.toLowerCase();
+      let page = 'home';
+      if (hash === '#servicios') page = 'services';
+      else if (hash === '#nosotros') page = 'nosotros';
+      else if (hash === '#equipo') page = 'equipo';
+      else if (hash === '#faq') page = 'faq';
+      else if (hash === '#contacto') page = 'contacto';
+      
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   return (
@@ -62,23 +81,100 @@ export default function App() {
         <div className="absolute top-[30%] right-[10%] w-[20%] h-[20%] bg-accent/5 rounded-full blur-[80px]"></div>
       </div>
 
-      <Navbar />
+      <Navbar currentPage={currentPage} />
       
       <main>
-        <Hero />
-        <TrustBar />
-        <Services />
-        <Features />
-        <Process />
-        <Team />
-        <Testimonials />
-        <Gallery />
-        <FAQ />
-        <CTASection />
-        <ContactForm />
+        <AnimatePresence mode="wait">
+          {currentPage === 'home' && (
+            <motion.div
+              key="home"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Hero />
+              <Footer />
+            </motion.div>
+          )}
+
+          {currentPage === 'services' && (
+            <motion.div
+              key="services"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+              className="pt-24 lg:pt-28"
+            >
+              <Services />
+              <TrustBar />
+              <Footer />
+            </motion.div>
+          )}
+
+          {currentPage === 'nosotros' && (
+            <motion.div
+              key="nosotros"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+              className="pt-24 lg:pt-28"
+            >
+              <Features />
+              <Process />
+              <Footer />
+            </motion.div>
+          )}
+
+          {currentPage === 'equipo' && (
+            <motion.div
+              key="equipo"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+              className="pt-24 lg:pt-28"
+            >
+              <Team />
+              <Gallery />
+              <Testimonials />
+              <Footer />
+            </motion.div>
+          )}
+
+          {currentPage === 'faq' && (
+            <motion.div
+              key="faq"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+              className="pt-24 lg:pt-28"
+            >
+              <FAQ />
+              <Footer />
+            </motion.div>
+          )}
+
+          {currentPage === 'contacto' && (
+            <motion.div
+              key="contacto"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+              className="pt-24 lg:pt-28"
+            >
+              <ContactForm />
+              <CTASection />
+              <Footer />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
-      <Footer />
       <WhatsAppButton />
     </div>
   );

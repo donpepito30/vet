@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, PawPrint } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function Navbar() {
+export default function Navbar({ currentPage }: { currentPage: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -19,19 +19,22 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const forceSolid = currentPage !== 'home';
+  const showScrolledStyle = forceSolid || isScrolled;
+
   const navLinks = [
-    { name: 'Inicio', href: '#' },
-    { name: 'Servicios', href: '#servicios' },
-    { name: 'Nosotros', href: '#nosotros' },
-    { name: 'Equipo', href: '#equipo' },
-    { name: 'FAQ', href: '#faq' },
-    { name: 'Contacto', href: '#contacto' },
+    { name: 'Inicio', href: '#', activeKey: 'home' },
+    { name: 'Servicios', href: '#servicios', activeKey: 'services' },
+    { name: 'Nosotros', href: '#nosotros', activeKey: 'nosotros' },
+    { name: 'Equipo', href: '#equipo', activeKey: 'equipo' },
+    { name: 'FAQ', href: '#faq', activeKey: 'faq' },
+    { name: 'Contacto', href: '#contacto', activeKey: 'contacto' },
   ];
 
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        isScrolled ? 'glass-effect py-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)]' : 'bg-transparent py-8'
+        showScrolledStyle ? 'glass-effect py-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] border-b border-neutral/30' : 'bg-transparent py-8'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
@@ -77,7 +80,7 @@ export default function Navbar() {
 
           <div className="flex flex-col">
             <motion.span 
-              className={`text-2xl font-display font-black tracking-tighter leading-none transition-colors ${isScrolled ? 'text-primary' : 'text-white'}`}
+              className={`text-2xl font-display font-black tracking-tighter leading-none transition-colors ${showScrolledStyle ? 'text-primary' : 'text-white'}`}
               variants={{
                 initial: { x: 0 },
                 hover: { x: 2 }
@@ -127,17 +130,24 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-10">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className={`text-[13px] font-extrabold tracking-[0.15em] uppercase transition-all hover:text-accent relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full ${
-                isScrolled ? 'text-ink' : 'text-white/90 hover:text-accent'
-              }`}
-            >
-              {link.name}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = currentPage === link.activeKey;
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                className={`text-[13px] font-extrabold tracking-[0.15em] uppercase transition-all hover:text-accent relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-accent after:transition-all ${
+                  isActive ? 'text-accent after:w-full' : 'after:w-0 hover:after:w-full'
+                } ${
+                  showScrolledStyle 
+                    ? isActive ? 'text-accent' : 'text-ink'
+                    : isActive ? 'text-accent' : 'text-white/90 hover:text-accent'
+                }`}
+              >
+                {link.name}
+              </a>
+            );
+          })}
           <a
             href="#contacto"
             className="bg-accent hover:bg-cta-hover text-white px-8 py-3.5 rounded-full text-[13px] font-black tracking-widest transition-all shadow-xl shadow-accent/20 hover:-translate-y-1 active:scale-95"
@@ -150,7 +160,7 @@ export default function Navbar() {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`lg:hidden p-2 rounded-lg transition-colors ${
-            isScrolled ? 'text-ink' : 'text-white'
+            showScrolledStyle ? 'text-ink' : 'text-white'
           }`}
           aria-label="Toggle menu"
         >
@@ -165,19 +175,24 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 w-full bg-white shadow-xl md:hidden py-8 px-6 border-t border-neutral"
+            className="absolute top-full left-0 w-full bg-white shadow-xl lg:hidden py-8 px-6 border-t border-neutral"
           >
             <div className="flex flex-col gap-6">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-lg font-black text-ink hover:text-accent transition-colors uppercase tracking-widest"
-                >
-                  {link.name}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = currentPage === link.activeKey;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`text-lg font-black transition-colors uppercase tracking-widest ${
+                      isActive ? 'text-accent' : 'text-ink hover:text-accent'
+                    }`}
+                  >
+                    {link.name}
+                  </a>
+                );
+              })}
               <a
                 href="#contacto"
                 onClick={() => setIsOpen(false)}
