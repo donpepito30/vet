@@ -19,6 +19,7 @@ import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 import TrustBar from './components/TrustBar';
 import { WhatsAppButton } from './components/WhatsAppButton';
+import InternalHeader from './components/InternalHeader';
 
 /**
  * @license
@@ -81,7 +82,7 @@ export default function App() {
         <div className="absolute top-[30%] right-[10%] w-[20%] h-[20%] bg-accent/5 rounded-full blur-[80px]"></div>
       </div>
 
-      <Navbar currentPage={currentPage} />
+      {currentPage === 'home' && <Navbar currentPage={currentPage} />}
       
       <main>
         <AnimatePresence mode="wait">
@@ -105,8 +106,9 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="pt-24 lg:pt-28"
+              className="pt-0"
             >
+              <InternalHeader currentPage={currentPage} />
               <Services />
               <TrustBar />
               <Footer />
@@ -120,8 +122,9 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="pt-24 lg:pt-28"
+              className="pt-0"
             >
+              <InternalHeader currentPage={currentPage} />
               <Features />
               <Process />
               <Footer />
@@ -135,8 +138,9 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="pt-24 lg:pt-28"
+              className="pt-0"
             >
+              <InternalHeader currentPage={currentPage} />
               <Team />
               <Gallery />
               <Testimonials />
@@ -151,8 +155,9 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="pt-24 lg:pt-28"
+              className="pt-0"
             >
+              <InternalHeader currentPage={currentPage} />
               <FAQ />
               <Footer />
             </motion.div>
@@ -165,8 +170,9 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="pt-24 lg:pt-28"
+              className="pt-0"
             >
+              <InternalHeader currentPage={currentPage} />
               <ContactForm />
               <CTASection />
               <Footer />
