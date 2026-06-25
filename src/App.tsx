@@ -39,6 +39,11 @@ export default function App() {
       metaDisc.setAttribute('content', 'Atención veterinaria integral con tecnología moderna y profesionales comprometidos. Cuidamos a tu mascota con amor y excelencia 24/7.');
     }
 
+    // Force redirect to home on page refresh/initial mount
+    if (window.location.hash) {
+      window.location.hash = '';
+    }
+
     const handleHashChange = () => {
       const hash = window.location.hash.toLowerCase();
       let page = 'home';
@@ -52,7 +57,7 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    handleHashChange();
+    setCurrentPage('home');
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
