@@ -30,15 +30,48 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
 
   useEffect(() => {
-    // Basic SEO Title update
-    document.title = 'VetCare Elite | Clínica Veterinaria Premium - Emergencias 24/7';
-    
-    // Add meta description dynamically
-    const metaDisc = document.querySelector('meta[name="description"]');
-    if (metaDisc) {
-      metaDisc.setAttribute('content', 'Atención veterinaria integral con tecnología moderna y profesionales comprometidos. Cuidamos a tu mascota con amor y excelencia 24/7.');
+    let title = 'VetCare Elite | Clínica Veterinaria Premium - Emergencias 24/7';
+    let description = 'Atención veterinaria integral con tecnología moderna y profesionales comprometidos. Cuidamos a tu mascota con amor y excelencia 24/7.';
+
+    switch (currentPage) {
+      case 'services':
+        title = 'Servicios Veterinarios Avanzados | VetCare Elite';
+        description = 'Especialidades veterinarias de alta complejidad: cirugía avanzada, cardiología, diagnóstico por imagen y hospitalización 24 horas.';
+        break;
+      case 'nosotros':
+        title = 'Sobre Nosotros | Clínica Veterinaria de Excelencia | VetCare Elite';
+        description = 'Conoce nuestra clínica veterinaria líder en medicina avanzada. Nuestro compromiso, valores, procesos certificados y amor por tu mascota.';
+        break;
+      case 'equipo':
+        title = 'Nuestro Equipo de Especialistas Veterinarios | VetCare Elite';
+        description = 'Conoce a nuestro plantel médico veterinario de excelencia: cirujanos, cardiólogos e intensivistas dedicados al bienestar integral.';
+        break;
+      case 'faq':
+        title = 'Preguntas Frecuentes (FAQ) | VetCare Elite';
+        description = 'Respuestas a todas tus consultas sobre atención de emergencias 24/7, reserva de turnos, preparación para cirugías y visitas de mascotas.';
+        break;
+      case 'contacto':
+        title = 'Contacto y Ubicación de Urgencias | VetCare Elite';
+        description = 'Agenda tu consulta o comunícate las 24 horas por emergencias. Dirección, mapa, teléfonos y formulario de contacto rápido.';
+        break;
+      default:
+        break;
     }
 
+    document.title = title;
+    const metaDisc = document.querySelector('meta[name="description"]');
+    if (metaDisc) {
+      metaDisc.setAttribute('content', description);
+    }
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', description);
+  }, [currentPage]);
+
+  useEffect(() => {
     // Force redirect to home on page refresh/initial mount
     if (window.location.hash) {
       window.location.hash = '';
