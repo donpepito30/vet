@@ -19,8 +19,12 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const forceSolid = currentPage !== 'home';
-  const showScrolledStyle = forceSolid || isScrolled;
+  // Sync scroll state when changing pages
+  useEffect(() => {
+    setIsScrolled(window.scrollY > 20);
+  }, [currentPage]);
+
+  const isHome = currentPage === 'home';
 
   const navLinks = [
     { name: 'Inicio', href: '#', activeKey: 'home' },
@@ -31,16 +35,28 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
     { name: 'Contacto', href: '#contacto', activeKey: 'contacto' },
   ];
 
+  // Dynamic header styles based on page context and scroll position
+  let headerClasses = "fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl z-50 transition-all duration-500 border backdrop-blur-md ";
+  if (isOpen) {
+    headerClasses += "bg-white border-neutral-300/50 shadow-premium rounded-[2rem] py-5 px-6";
+  } else if (isHome) {
+    if (isScrolled) {
+      headerClasses += "bg-white/85 border-neutral/40 shadow-premium py-2.5 px-3 md:px-5 rounded-full";
+    } else {
+      headerClasses += "bg-white/10 md:bg-black/15 border-white/10 shadow-soft py-4 px-5 md:px-7 rounded-full";
+    }
+  } else {
+    if (isScrolled) {
+      headerClasses += "bg-white/85 border-neutral/40 shadow-premium py-2.5 px-3 md:px-5 rounded-full";
+    } else {
+      headerClasses += "bg-white/45 border-neutral-200/50 shadow-soft py-4 px-5 md:px-7 rounded-full";
+    }
+  }
+
+  const useDarkText = isOpen || isScrolled || !isHome;
+
   return (
-    <header
-      className={`fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl z-50 transition-all duration-500 border backdrop-blur-md ${
-        isOpen 
-          ? 'bg-white border-neutral-300/50 shadow-premium rounded-[2rem] py-5 px-6' 
-          : showScrolledStyle 
-            ? 'bg-white/85 border-neutral/40 shadow-premium py-2.5 px-3 md:px-5 rounded-full' 
-            : 'bg-white/10 md:bg-black/15 border-white/10 shadow-soft py-4 px-5 md:px-7 rounded-full'
-      }`}
-    >
+    <header className={headerClasses}>
       <div className="flex justify-between items-center w-full">
         {/* Logo */}
         <motion.a 
@@ -86,7 +102,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
           <div className="flex flex-col">
             <motion.span 
               className={`text-xl font-display font-black tracking-tighter leading-none transition-colors duration-300 ${
-                isOpen || showScrolledStyle ? 'text-primary' : 'text-white'
+                useDarkText ? 'text-primary' : 'text-white'
               }`}
             >
               <motion.span 
@@ -103,7 +119,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
               </motion.span>
             </motion.span>
             <span className={`text-[7px] font-black uppercase tracking-[0.35em] leading-none mt-1 transition-colors duration-300 ${
-              isOpen || showScrolledStyle ? 'text-accent/70' : 'text-white/60'
+              useDarkText ? 'text-accent/70' : 'text-white/60'
             }`}>
               Premium Veterinary
             </span>
@@ -121,7 +137,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
                 className={`relative py-2 px-1 text-[13px] font-extrabold tracking-[0.12em] uppercase transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-center ${
                   isActive 
                     ? 'text-accent after:scale-x-100' 
-                    : isOpen || showScrolledStyle 
+                    : useDarkText 
                       ? 'text-ink hover:text-accent' 
                       : 'text-white/95 hover:text-accent'
                 }`}
@@ -148,7 +164,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`lg:hidden p-2 rounded-full transition-colors duration-300 hover:bg-black/5 ${
-            isOpen || showScrolledStyle ? 'text-ink' : 'text-white'
+            useDarkText ? 'text-ink' : 'text-white'
           }`}
           aria-label="Toggle menu"
         >
